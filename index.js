@@ -24,16 +24,29 @@ const run = async () => {
     app.get("/accessory", async (req, res) => {
       const cursor = productCollection.find({});
       const product = await cursor.toArray();
-
       res.send({ status: true, data: product });
     });
 
     app.get("/accessory/:id", async (req, res) => {
       const id = req.params.id;
-
       const result = await productCollection.findOne({ _id: ObjectId(id) });
-      console.log(result);
       res.send(result);
+    });
+
+
+    app.get("/accessoryByCategory", async (req, res) => {
+      try {
+        const category = req.query.category; // Use req.query to get the category query parameter
+        if (!category) {
+          return res.status(400).json({ error: 'Category parameter is missing or empty' });
+        }
+        const result = await productCollection.find({ category: category }).toArray();
+        res.json(result);
+      } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Internal Server Error' });
+      }
+      
     });
 
   } finally {
