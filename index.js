@@ -27,11 +27,14 @@ const run = async () => {
       res.send({ status: true, data: product });
     });
 
-    app.get("/accessory/:id", async (req, res) => {
-      const id = req.params.id;
+    app.get("/accessory/:_id", async (req, res) => {
+      const id = req.params._id;
       const result = await productCollection.findOne({ _id: ObjectId(id) });
       res.send(result);
     });
+   
+
+
 
 
     app.get("/accessoryByCategory", async (req, res) => {
